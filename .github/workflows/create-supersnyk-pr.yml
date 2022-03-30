@@ -1,9 +1,9 @@
-name: Combine Snyk Pull Requests
+name: Create SuperSnyk 🦸 Pull Request
 on:
   workflow_dispatch:
 
 jobs:
-  combine-snyk-prs:
+  create-supersnyk-pr:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,4 +17,4 @@ jobs:
       - name: Create combined SuperSnyk Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          title: Supersnyk PR 🦸
+          title: Supersnyk 🦸
