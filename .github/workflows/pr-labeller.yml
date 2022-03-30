@@ -1,0 +1,11 @@
+name: Label Snyk Pull Requests
+on:
+  - pull_request
+
+jobs:
+  label-snyk-prs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: TimonVS/pr-labeler-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
