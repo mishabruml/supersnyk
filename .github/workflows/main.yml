@@ -12,11 +12,11 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' || github.event.label.name == 'snyk' }}
+    # if: ${{ github.event_name == 'push' || github.event.label.name == 'snyk' }}
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: master
+          ref: main
           fetch-depth: 0
       - uses: bobvanderlinden/combine-pull-requests@v3
         with:
