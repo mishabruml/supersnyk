@@ -2,14 +2,9 @@ name: Combine Snyk Pull Requests
 on:
   workflow_dispatch:
 
-  pull_request:
-    types:
-        - labeled
-
 jobs:
   combine-snyk-prs:
     runs-on: ubuntu-latest
-    if: ${{ github.event.label.name == 'snyk' }}
     steps:
       - uses: actions/checkout@v2
         with:
