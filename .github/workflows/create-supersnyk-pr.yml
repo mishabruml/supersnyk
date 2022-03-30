@@ -14,6 +14,7 @@ jobs:
         with:
           label: snyk
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: gh pr list --label snyk --json number | jq '.[]|.number' | awk 'PREPEND="closes #" {print PREPEND $0}'
       - name: Create SuperSnyk Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
