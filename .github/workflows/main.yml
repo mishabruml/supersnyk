@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: master
+          ref: main
           fetch-depth: 0
       - uses: bobvanderlinden/combine-pull-requests@v3
         with:
