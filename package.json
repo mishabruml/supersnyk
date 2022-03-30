@@ -1,0 +1,23 @@
+{
+  "name": "supersnyk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mishabruml/supersnyk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mishabruml/supersnyk/issues"
+  },
+  "homepage": "https://github.com/mishabruml/supersnyk#readme",
+  "dependencies": {
+    "got": "^11.8.3",
+    "jest": "^27.0.6"
+  }
+}
