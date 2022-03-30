@@ -20,7 +20,5 @@
     "got": "^11.8.3",
     "jest": "^27.0.6"
   },
-  "devDependencies": {
-    "git-json-merge": "^0.4.5"
-  }
+  "devDependencies": {}
 }
