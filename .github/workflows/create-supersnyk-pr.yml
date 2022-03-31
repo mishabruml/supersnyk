@@ -28,4 +28,4 @@ jobs:
   #         author: 🦸 SuperSnyk-bot <${{ github.actor }}@users.noreply.github.com>
 
   supersnyk:
-    uses: ../../
+    uses: .
