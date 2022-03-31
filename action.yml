@@ -12,7 +12,7 @@ runs:
     - uses: TimonVS/pr-labeler-action@v3
       name: Detect and label Snyk PR for 🦸 SuperSnyk
       with:
-        configuration-path: $GITHUB_ACTION_PATH/pr-labeler.yml
+        configuration-path: pr-labeler.yml
       env:
         GITHUB_TOKEN: ${{ inputs.repo-token }}
 
