@@ -28,6 +28,7 @@ runs:
         filterOutClosed: true
         filterOutDraft: 1
     - run: echo "Your PR is ${prNumber} and its JSON is ${prJSON}"
+      shell: bash
       if: success() && steps.PR.outputs.number
       env:
         prNumber: ${{ steps.PR.outputs.number }}
