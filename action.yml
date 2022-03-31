@@ -2,6 +2,7 @@ name: SuperSnyk 🦸
 description: "Combine multiple automated Snyk PRs into a single SuperSnyk 🦸 PR"
 branding:
   icon: 'git-pull-request'
+  color: 'orange'
 inputs:
   github_token:
     description: "GitHub token i.e. secrets.GITHUB_TOKEN"
