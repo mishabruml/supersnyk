@@ -5,6 +5,7 @@ A Github Action to merge [automated Snyk PRs](https://docs.snyk.io/products/snyk
 - PRs are detected via the incoming branch name (`snyk-fix-*` or `snyk-update-*`) and PR title `[Snyk] *`
 - Snyk PRs will be automatically labelled with `snyk` label
 - All Snyk PRs with the `snyk` label are merged together into a single SuperSnyk 🦸 PR targeting `main` branch
+- SuperSnyk 🦸 PR body will be automatically updated with each child Synk PR using [autolink reference](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/autolinked-references-and-urls) meaning merging the SuperSnyk 🦸 PR will close all the snyky children 😛
 
 
 ## Usage
