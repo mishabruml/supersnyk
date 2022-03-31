@@ -1,5 +1,5 @@
 name: SuperSnyk 🦸
-description: "Detects automated Snyk PRs and adds 'snyk' label. Combines PRs with the 'snyk' label into a single SuperSnyk 🦸 PR. If a SuperSnyk 🦸 PR already exists, it will be updated."
+description: "Combine multiple automated Snyk PRs into a single SuperSnyk 🦸 PR"
 inputs:
   github_token:
     description: "GitHub token i.e. secrets.GITHUB_TOKEN"
