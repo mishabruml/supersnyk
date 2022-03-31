@@ -28,3 +28,4 @@ jobs:
         with:
           title: 🦸 SuperSnyk
           body: "🦸 SuperSnyk PR created with [create-pull-request](https://github.com/peter-evans/create-pull-request)\n${{ env.SUPERSNYK_PR_BODY }}"
+          author: 🦸 SuperSnyk-bot <${{ github.actor }}@users.noreply.github.com>
