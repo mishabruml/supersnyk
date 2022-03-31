@@ -1,8 +1,8 @@
 name: SuperSnyk 🦸
 description: "Combine multiple automated Snyk PRs into a single SuperSnyk 🦸 PR"
 branding:
-  icon: 'git-pull-request'
-  color: 'orange'
+  icon: "git-pull-request"
+  color: "orange"
 inputs:
   github_token:
     description: "GitHub token i.e. secrets.GITHUB_TOKEN"
@@ -12,10 +12,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v3
-      with:
-        ref: main
-        fetch-depth: 0
+    # - uses: actions/checkout@v3
+    #   with:
+    #     ref: main
+    #     fetch-depth: 0
 
     - name: Detect if Snyk PR and set flag
       run: echo "IS_SNYK_PR=${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}" >> $GITHUB_ENV
@@ -33,6 +33,14 @@ runs:
       with:
         label: snyk
         repo-token: ${{ inputs.github_token }}
+
+    # - name: Merge PRs with 'snyk' label together
+    #       if: env.IS_SNYK_PR
+    #       run: |
+    #         git merge --no-commit $(gh pr list -l snyk --json headRefName | jq '.[].headRefName' | tr -d '"')
+    #       shell: bash
+    #       env:
+    #         GITHUB_TOKEN: ${{ inputs.github_token }}
 
     - name: Get Snyk PRs metadata
       if: env.IS_SNYK_PR
