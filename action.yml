@@ -6,10 +6,6 @@ inputs:
     required: true
     default: "CHANGE_ME"
 
-env:
-  GITHUB_TOKEN: ${{ inputs.github_token }}
-  IS_SNYK_PR: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
-
 runs:
   using: "composite"
   steps:
@@ -18,26 +14,34 @@ runs:
         ref: main
         fetch-depth: 0
 
-    - name: Add 'snyk' label to PR
-      if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
-      run: gh pr edit $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }') --add-label 'snyk'
+    - name: Detect if Snyk PR and set flag
+      run: echo "IS_SNYK_PR=${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}" >> $GITHUB_ENV
       shell: bash
 
+    - name: Add 'snyk' label to snyk PR
+      if: env.IS_SNYK_PR
+      run: gh pr edit $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }') --add-label 'snyk'
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+
     - uses: bobvanderlinden/combine-pull-requests@v3
-      if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
+      if: env.IS_SNYK_PR
       with:
         label: snyk
         repo-token: ${{ inputs.github_token }}
 
     - name: Get Snyk PRs metadata
-      if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
+      if: env.IS_SNYK_PR
       run: |
         chmod +x $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
         $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
 
     - name: Create SuperSnyk 🦸 PR
-      if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
+      if: env.IS_SNYK_PR
       uses: peter-evans/create-pull-request@v4
       with:
         title: 🦸 SuperSnyk
