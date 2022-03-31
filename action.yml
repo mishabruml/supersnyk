@@ -16,8 +16,10 @@ runs:
       with:
         label: snyk
         repo-token: ${{ inputs.repo-token }}
+    - run: chmod +x $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
+      shell: bash
     - name: Get Snyk PRs metadata
-      run: get-snyk-prs-metadata.sh
+      run: $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.repo-token }}
