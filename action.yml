@@ -1,0 +1,24 @@
+name: Create SuperSnyk 🦸 Pull Request
+description: "When triggered, combines any PR with the 'snyk' label into a single SuperSnyk 🦸 PR. If a SuperSnyk 🦸 PR already exists, it will be updated."
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: main
+        fetch-depth: 0
+    - uses: bobvanderlinden/combine-pull-requests@v3
+      with:
+        label: snyk
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Get Snyk PRs metadata
+      run: get-snyk-prs-metadata.sh
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create SuperSnyk 🦸 PR
+      uses: peter-evans/create-pull-request@v4
+      with:
+        title: 🦸 SuperSnyk
+        body: "🦸 SuperSnyk PR created with [create-pull-request](https://github.com/peter-evans/create-pull-request)\n${{ env.SUPERSNYK_PR_BODY }}"
+        author: 🦸 SuperSnyk-bot <${{ github.actor }}@users.noreply.github.com>
