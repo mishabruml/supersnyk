@@ -9,10 +9,16 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: main
         fetch-depth: 0
+
+    - name: List Files
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.repo-token }}
+      run: ls -a $GITHUB_ACTION_PATH
 
     - uses: TimonVS/pr-labeler-action@v3
       name: Detect and label Snyk PR for 🦸 SuperSnyk
