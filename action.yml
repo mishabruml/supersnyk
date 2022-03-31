@@ -15,49 +15,41 @@ runs:
         configuration-path: $GITHUB_ACTION_PATH/pr-labeler.yml
       env:
         GITHUB_TOKEN: ${{ inputs.repo-token }}
-    # - run: gh pr view --json labels | jq '.labels | .[] | select(.name == "snykk")'
-    #   shell: bash
-    #   env:
-    #     GITHUB_TOKEN: ${{ inputs.repo-token }}
 
     - uses: 8BitJonny/gh-get-current-pr@2.0.0
+      id: PR
       with:
         github-token: ${{ inputs.repo-token }}
-        # Verbose setting SHA when using Pull_Request event trigger to fix #16
         sha: ${{ github.event.pull_request.head.sha }}
         filterOutClosed: true
         filterOutDraft: 1
-    - run: echo "Your PR is ${prNumber} and its JSON is ${prJSON}"
+
+    - run: echo "PR LABEL ${prLabel}"
       shell: bash
       if: success() && steps.PR.outputs.number
       env:
         prNumber: ${{ steps.PR.outputs.number }}
-        # JSON object with the full PR object
         prJSON: ${{ steps.PR.outputs.pr }}
-        # Direct access to common PR properties
-        prUrl: ${{ steps.PR.outputs.pr_url }}
-        prTitle: ${{ steps.PR.outputs.pr_title }}
-        prBody: ${{ steps.PR.outputs.pr_body }}
-        prCreatedAt: ${{ steps.PR.outputs.pr_created_at }}
-        prMergedAt: ${{ steps.PR.outputs.pr_merged_at }}
-        prClosedAt: ${{ steps.PR.outputs.pr_closed_at }}
         prLabel: ${{ steps.PR.outputs.pr_labels }}
 
     - uses: actions/checkout@v2
       with:
         ref: main
         fetch-depth: 0
+
     - uses: bobvanderlinden/combine-pull-requests@v3
       with:
         label: snyk
         repo-token: ${{ inputs.repo-token }}
-    - run: chmod +x $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
-      shell: bash
+
     - name: Get Snyk PRs metadata
-      run: $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.repo-token }}
+      run: |
+        chmod +x $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
+        $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
+
     - name: Create SuperSnyk 🦸 PR
       uses: peter-evans/create-pull-request@v4
       with:
