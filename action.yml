@@ -1,7 +1,7 @@
 name: SuperSnyk 🦸
 description: "Detects automated Snyk PRs and adds 'snyk' label. Combines PRs with the 'snyk' label into a single SuperSnyk 🦸 PR. If a SuperSnyk 🦸 PR already exists, it will be updated."
 inputs:
-  repo-token:
+  github_token:
     description: "GitHub token i.e. secrets.GITHUB_TOKEN"
     required: true
     default: "CHANGE_ME"
@@ -18,11 +18,13 @@ runs:
       if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
       run: gh pr edit --add-label 'snyk'
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
 
     # - uses: 8BitJonny/gh-get-current-pr@2.0.0
     #   id: PR
     #   with:
-    #     github-token: ${{ inputs.repo-token }}
+    #     github-token: ${{ inputs.github_token }}
     #     sha: ${{ github.event.pull_request.head.sha }}
     #     filterOutClosed: true
     #     filterOutDraft: 1
@@ -39,7 +41,7 @@ runs:
       if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
       with:
         label: snyk
-        repo-token: ${{ inputs.repo-token }}
+        repo-token: ${{ inputs.github_token }}
 
     - name: Get Snyk PRs metadata
       if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
@@ -48,7 +50,7 @@ runs:
         $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
       shell: bash
       env:
-        GITHUB_TOKEN: ${{ inputs.repo-token }}
+        GITHUB_TOKEN: ${{ inputs.github_token }}
 
     - name: Create SuperSnyk 🦸 PR
       if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
