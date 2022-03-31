@@ -15,7 +15,7 @@ jobs:
         with:
           label: snyk
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Get Snyk PR metadata
+      - name: Get Snyk PRs metadata
         run: ./.github/get-snyk-prs-metadata.sh
         shell: bash
         env:
@@ -23,8 +23,8 @@ jobs:
       - name: Use the value
         id: step_two
         run: echo "${{ env.SUPERSNYK_PR_BODY }}"
-      - name: Create SuperSnyk Pull Request
+      - name: Create SuperSnyk 🦸 PR
         uses: peter-evans/create-pull-request@v4
         with:
-          title: Supersnyk 🦸
-          body: "${{ env.SUPERSNYK_PR_BODY }}\nSupersnyk PR created with [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action"
+          title: 🦸 SuperSnyk
+          body: "🦸 SuperSnyk PR created with [create-pull-request](https://github.com/peter-evans/create-pull-request)\n${{ env.SUPERSNYK_PR_BODY }}"
