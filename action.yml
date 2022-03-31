@@ -6,20 +6,22 @@ inputs:
     required: true
     default: "CHANGE_ME"
 
+env:
+  GITHUB_TOKEN: ${{ inputs.github_token }}
+  IS_SNYK_PR: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
+
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
       with:
-        ref: main # Should this be main? Hmm
+        ref: main
         fetch-depth: 0
 
     - name: Add 'snyk' label to PR
       if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
       run: gh pr edit $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }') --add-label 'snyk'
       shell: bash
-      env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
 
     - uses: bobvanderlinden/combine-pull-requests@v3
       if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
@@ -33,8 +35,6 @@ runs:
         chmod +x $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
         $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
       shell: bash
-      env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
 
     - name: Create SuperSnyk 🦸 PR
       if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
