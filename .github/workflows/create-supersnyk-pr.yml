@@ -19,6 +19,9 @@ jobs:
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Use the value
+        id: step_two
+        run: echo "${{ env.SUPERSNYK_PR_BODY }}"
       - name: Create SuperSnyk Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
