@@ -1,13 +1,19 @@
-name: Create SuperSnyk 🦸 Pull Request
-description: "When triggered, combines any PR with the 'snyk' label into a single SuperSnyk 🦸 PR. If a SuperSnyk 🦸 PR already exists, it will be updated."
+name: SuperSnyk 🦸
+description: "Detects automated Snyk PRs and adds 'snyk' label. Combines PRs with the 'snyk' label into a single SuperSnyk 🦸 PR. If a SuperSnyk 🦸 PR already exists, it will be updated."
 inputs:
   repo-token:
-    description: "The GitHub token"
+    description: "GitHub token i.e. secrets.GITHUB_TOKEN"
     required: true
     default: "CHANGE_ME"
+
 runs:
   using: "composite"
   steps:
+    - uses: TimonVS/pr-labeler-action@v3
+      name: Detect and label Snyk PR for 🦸 SuperSnyk
+      env:
+        GITHUB_TOKEN: ${{ inputs.repo-token }}
+    - run: gh pr view --json labels | jq '.labels | .[] | select(.name == "snykk")'
     - uses: actions/checkout@v2
       with:
         ref: main
