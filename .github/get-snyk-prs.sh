@@ -1,0 +1,1 @@
+gh pr list --label snyk --json number | jq '.[]|.number' | while read line; do echo "closes #$line"; done
