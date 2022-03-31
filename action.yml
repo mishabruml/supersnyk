@@ -9,13 +9,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-    if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
     - uses: actions/checkout@v3
       with:
-        ref: main
+        ref: main # Should this be main? Hmm
         fetch-depth: 0
 
-    - name: Add 'snyk' label to PR 
+    - name: Add 'snyk' label to PR
+      if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
       run: gh pr edit --add-label 'snyk'
       shell: bash
 
@@ -36,19 +36,22 @@ runs:
     #     prLabel: ${{ steps.PR.outputs.pr_labels }}
 
     - uses: bobvanderlinden/combine-pull-requests@v3
+      if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
       with:
         label: snyk
         repo-token: ${{ inputs.repo-token }}
 
     - name: Get Snyk PRs metadata
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ inputs.repo-token }}
+      if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
       run: |
         chmod +x $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
         $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.repo-token }}
 
     - name: Create SuperSnyk 🦸 PR
+      if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
       uses: peter-evans/create-pull-request@v4
       with:
         title: 🦸 SuperSnyk
