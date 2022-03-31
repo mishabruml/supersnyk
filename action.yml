@@ -21,22 +21,6 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
 
-    # - uses: 8BitJonny/gh-get-current-pr@2.0.0
-    #   id: PR
-    #   with:
-    #     github-token: ${{ inputs.github_token }}
-    #     sha: ${{ github.event.pull_request.head.sha }}
-    #     filterOutClosed: true
-    #     filterOutDraft: 1
-
-    # - run: echo "PR LABEL ${prLabel}"
-    #   shell: bash
-    #   if: success() && steps.PR.outputs.number
-    #   env:
-    #     prNumber: ${{ steps.PR.outputs.number }}
-    #     prJSON: ${{ steps.PR.outputs.pr }}
-    #     prLabel: ${{ steps.PR.outputs.pr_labels }}
-
     - uses: bobvanderlinden/combine-pull-requests@v3
       if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
       with:
