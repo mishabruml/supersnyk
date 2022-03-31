@@ -16,7 +16,7 @@ runs:
 
     - name: Add 'snyk' label to PR
       if: ${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}
-      run: gh pr edit --add-label 'snyk'
+      run: gh pr edit $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }') --add-label 'snyk'
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
