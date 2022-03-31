@@ -1,6 +1,7 @@
 name: Create SuperSnyk 🦸 Pull Request
 on:
   workflow_dispatch:
+  push
 
 jobs:
   create-supersnyk-pr:
