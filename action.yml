@@ -54,15 +54,15 @@ runs:
         git config user.name github-actions
         git config user.email github-actions@github.com
 
-        git branch supersnyk ${{ inputs.main_branch_name }}
-        git checkout supersnyk
+        git branch supersnyk-temp ${{ inputs.main_branch_name }}
+        git checkout supersnyk-temp
         git pull origin ${{ env.SNYK_PR_BRANCH_NAMES }} --no-edit
-        git push origin supersnyk
+        git push origin supersnyk-temp
 
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        ref: supersnyk
+        ref: supersnyk-temp
 
     - name: Create SuperSnyk 🦸 PR
       if: env.IS_SNYK_PR
@@ -71,3 +71,4 @@ runs:
         title: 🦸 SuperSnyk
         body: "🦸 SuperSnyk PR created with [supersnyk](https://github.com/mishabruml/supersnyk)\n${{ env.SUPERSNYK_PR_BODY }}"
         branch: supersnyk
+        delete-branch: true
