@@ -31,13 +31,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
 
-    # - uses: bobvanderlinden/combine-pull-requests@v3
-    #   if: env.IS_SNYK_PR
-    #   with:
-    #     label: snyk
-    #     repo-token: ${{ inputs.github_token }}
-
-    - name: Fetch Snyk PRs
+    - name: Get Snyk PRs
       if: env.IS_SNYK_PR
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
@@ -46,23 +40,20 @@ runs:
         chmod +x $GITHUB_ACTION_PATH/get-snyk-prs.sh
         $GITHUB_ACTION_PATH/get-snyk-prs.sh
 
-    - name: Create SuperSnyk 🦸 branch
+    - name: Create SuperSnyk 🦸 commit
       if: env.IS_SNYK_PR
       shell: bash
+      env:
+        MAIN_BRANCH_NAME: ${{ inputs.main_branch_name }}
+        SNYK_PR_BRANCH_NAMES: ${{ env.SNYK_PR_BRANCH_NAMES }}
       run: |
-        git config pull.rebase false
-        git config user.name github-actions
-        git config user.email github-actions@github.com
+        chmod +x $GITHUB_ACTION_PATH/create-supersnyk-commit.sh
+        $GITHUB_ACTION_PATH/create-supersnyk-commit.sh
 
-        git branch supersnyk-temp ${{ inputs.main_branch_name }}
-        git checkout supersnyk-temp
-        git pull origin ${{ env.SNYK_PR_BRANCH_NAMES }} --no-edit
-        git push origin supersnyk-temp
-
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        ref: supersnyk-temp
+    # - uses: actions/checkout@v3
+    #   with:
+    #     fetch-depth: 0
+    #     ref: ${{ env.SUPERSNYK_TEMP_BRANCH }}
 
     - name: Create SuperSnyk 🦸 PR
       if: env.IS_SNYK_PR
