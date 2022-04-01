@@ -1,0 +1,19 @@
+{
+  "name": "supersnyk",
+  "version": "1.0.0",
+  "description": "A Github Action to merge [automated Snyk PRs](https://docs.snyk.io/products/snyk-open-source/open-source-basics/fix-pull-requests-for-new-vulnerabilities) against your repo into a single SuperSnyk 🦸 PR",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mishabruml/supersnyk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mishabruml/supersnyk/issues"
+  },
+  "homepage": "https://github.com/mishabruml/supersnyk#readme"
+}
