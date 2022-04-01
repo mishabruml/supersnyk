@@ -50,11 +50,6 @@ runs:
         chmod +x $GITHUB_ACTION_PATH/create-supersnyk-commit.sh
         $GITHUB_ACTION_PATH/create-supersnyk-commit.sh
 
-    # - uses: actions/checkout@v3
-    #   with:
-    #     fetch-depth: 0
-    #     ref: ${{ env.SUPERSNYK_TEMP_BRANCH }}
-
     - name: Create SuperSnyk 🦸 PR
       if: env.IS_SNYK_PR
       uses: peter-evans/create-pull-request@v4
