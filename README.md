@@ -11,7 +11,11 @@ A Github Action to merge [automated Snyk PRs](https://docs.snyk.io/products/snyk
 ## Usage
 
 ```yml
-on: [pull_request]
+on:
+  push:
+    branches:
+      - "snyk-upgrade-*"
+      - "snyk-fix-*"
 
 jobs:
   SuperSnyk:
