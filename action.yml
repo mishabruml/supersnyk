@@ -48,21 +48,24 @@ runs:
 
     - name: Create SuperSnyk 🦸 branch
       if: env.IS_SNYK_PR
+      env:
+        SUPERSNYK_TEMP_BRANCH: supersnyk_$(uuidgen)
       shell: bash
       run: |
         git config pull.rebase false
         git config user.name github-actions
         git config user.email github-actions@github.com
 
-        git branch supersnyk-temp ${{ inputs.main_branch_name }}
-        git checkout supersnyk-temp
+        git branch $SUPERSNYK_TEMP_BRANCH ${{ inputs.main_branch_name }}
+        git checkout $SUPERSNYK_TEMP_BRANCH
         git pull origin ${{ env.SNYK_PR_BRANCH_NAMES }} --no-edit
-        git push origin supersnyk-temp
+        git push origin $SUPERSNYK_TEMP_BRANCH
+        echo "SUPERSNYK_TEMP_BRANCH="$SUPERSNYK_TEMP_BRANCH"" >> $GITHUB_ENV
 
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        ref: supersnyk-temp
+        ref: env.SUPERSNYK_TEMP_BRANCH
 
     - name: Create SuperSnyk 🦸 PR
       if: env.IS_SNYK_PR
