@@ -1,0 +1,62 @@
+name: SuperSnyk 🦸
+description: "Combine multiple automated Snyk PRs into a single SuperSnyk 🦸 PR"
+branding:
+  icon: "git-pull-request"
+  color: "orange"
+inputs:
+  github_token:
+    description: "GitHub token i.e. secrets.GITHUB_TOKEN"
+    required: true
+    default: CHANGE_ME
+  main_branch_name:
+    description: The name of the main/base/default branch. Defaults to "main"
+    default: main
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: ${{ inputs.main_branch_name }}
+
+    - name: Detect if Snyk PR and set flag
+      run: echo "IS_SNYK_PR=${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Add 'snyk' label to snyk PR
+      if: env.IS_SNYK_PR
+      run: gh pr edit $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }') --add-label 'snyk'
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+
+    - uses: bobvanderlinden/combine-pull-requests@v3
+      if: env.IS_SNYK_PR
+      with:
+        label: snyk
+        repo-token: ${{ inputs.github_token }}
+
+    # - name: Merge PRs with 'snyk' label together
+    #       if: env.IS_SNYK_PR
+    #       run: |
+    #         git merge --no-commit $(gh pr list -l snyk --json headRefName | jq '.[].headRefName' | tr -d '"')
+    #       shell: bash
+    #       env:
+    #         GITHUB_TOKEN: ${{ inputs.github_token }}
+
+    - name: Get Snyk PRs metadata
+      if: env.IS_SNYK_PR
+      run: |
+        chmod +x $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
+        $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+
+    - name: Create SuperSnyk 🦸 PR
+      if: env.IS_SNYK_PR
+      uses: peter-evans/create-pull-request@v4
+      with:
+        title: 🦸 SuperSnyk
+        body: "🦸 SuperSnyk PR created with [supersnyk](https://github.com/mishabruml/supersnyk)\n${{ env.SUPERSNYK_PR_BODY }}"
