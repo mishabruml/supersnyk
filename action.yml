@@ -31,28 +31,55 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
 
-    - uses: bobvanderlinden/combine-pull-requests@v3
-      if: env.IS_SNYK_PR
-      with:
-        label: snyk
-        repo-token: ${{ inputs.github_token }}
+    # - uses: bobvanderlinden/combine-pull-requests@v3
+    #   if: env.IS_SNYK_PR
+    #   with:
+    #     label: snyk
+    #     repo-token: ${{ inputs.github_token }}
 
-    # - name: Merge PRs with 'snyk' label together
-    #       if: env.IS_SNYK_PR
-    #       run: |
-    #         git merge --no-commit $(gh pr list -l snyk --json headRefName | jq '.[].headRefName' | tr -d '"')
-    #       shell: bash
-    #       env:
-    #         GITHUB_TOKEN: ${{ inputs.github_token }}
-
-    - name: Get Snyk PRs metadata
+    - name: Fetch Snyk PRs
       if: env.IS_SNYK_PR
-      run: |
-        chmod +x $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
-        $GITHUB_ACTION_PATH/get-snyk-prs-metadata.sh
-      shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
+      run: |
+        chmod +x $GITHUB_ACTION_PATH/get-snyk-prs.sh
+        $GITHUB_ACTION_PATH/get-snyk-prs.sh
+
+    - name: Create SuperSnyk 🦸 branch
+      if: env.IS_SNYK_PR
+      run: |
+        git config pull.rebase false
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        
+        git branch supersnyk ${{ inputs.main_branch_name }}
+        git checkout supersnyk
+        git pull origin ${{ env.SNYK_PR_BRANCH_NAMES }} --no-edit
+        git push origin supersnyk
+
+    # # Creates a PR with the new combined branch
+    # - uses: actions/github-script@v3
+        name: Create Combined Pull Request
+        env:
+          PRS_STRING: ${{ steps.fetch-branch-names.outputs.prs-string }}
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const prString = process.env.PRS_STRING;
+            const body = 'This PR was created by the Combine PRs action by combining the following PRs:\n' + prString;
+            await github.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Combined PR',
+              head: '${{ github.event.inputs.combineBranchName }}',
+              base: '${{ steps.fetch-branch-names.outputs.base-branch }}',
+              body: body
+            });
+
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: supersnyk
 
     - name: Create SuperSnyk 🦸 PR
       if: env.IS_SNYK_PR
