@@ -40,6 +40,15 @@ runs:
         chmod +x $GITHUB_ACTION_PATH/get-snyk-prs.sh
         $GITHUB_ACTION_PATH/get-snyk-prs.sh
 
+    - id: create-supersnyk-pr-body
+      shell: bash
+      run: |
+        body=$(cat supersnyk_pr_body.txt)
+        body="${body//'%'/'%25'}"
+        body="${body//$'\n'/'%0A'}"
+        body="${body//$'\r'/'%0D'}" 
+        echo ::set-output name=supersnyk-pr-body::$body
+
     - name: Create SuperSnyk 🦸 commit
       if: env.IS_SNYK_PR
       shell: bash
@@ -55,6 +64,6 @@ runs:
       uses: peter-evans/create-pull-request@v4
       with:
         title: 🦸 SuperSnyk
-        body: "🦸 SuperSnyk PR created with [supersnyk](https://github.com/mishabruml/supersnyk)\n$(echo ${{ env.SUPERSNYK_PR_BODY }}) | sed -r 's/(closes #[0-9]+ )/&\n/g'"
+        body: "🦸 SuperSnyk PR created with [supersnyk](https://github.com/mishabruml/supersnyk)\n${{ steps.create-supersnyk-pr-body.outputs.supersnyk-pr-body }}"
         branch: supersnyk
         delete-branch: true
