@@ -1,7 +1,7 @@
 on:
   pull_request:
     branches:
-      - "snyk-fix"
+      - "snyk-fix*"
       # - "snyk-upgrade-*"
 
 jobs:
