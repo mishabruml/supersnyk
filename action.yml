@@ -48,6 +48,7 @@ runs:
         body="${body//$'\n'/'%0A'}"
         body="${body//$'\r'/'%0D'}" 
         echo ::set-output name=supersnyk-pr-body::$body
+        rm supersnyk_pr_body.txt
 
     - name: Create SuperSnyk 🦸 commit
       if: env.IS_SNYK_PR
