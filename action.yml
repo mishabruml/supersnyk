@@ -70,3 +70,4 @@ runs:
       with:
         title: 🦸 SuperSnyk
         body: "🦸 SuperSnyk PR created with [supersnyk](https://github.com/mishabruml/supersnyk)\n${{ env.SUPERSNYK_PR_BODY }}"
+        branch: supersnyk
