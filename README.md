@@ -25,9 +25,10 @@ jobs:
 
 ## Inputs
 
-| Name           | Description                                                                                                                                                                                                              | Required |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
-| `github_token` | `GITHUB_TOKEN` (permissions `contents: write` and `pull-requests: write`) or a `repo` scoped [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). | ✅       |
+| Name               | Description                                                                                                                                                                                                              | Required | Default |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ------- |
+| `github_token`     | `GITHUB_TOKEN` (permissions `contents: write` and `pull-requests: write`) or a `repo` scoped [Personal Access Token (PAT)](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token). | ✅       |         |
+| `main_branch_name` | The name of the main/[default](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches#about-the-default-branch) branch of your repo. | ❌       | `main`  |
 
 ## Motivation
 
