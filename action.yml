@@ -41,12 +41,14 @@ runs:
       if: env.IS_SNYK_PR
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
+      shell: bash
       run: |
         chmod +x $GITHUB_ACTION_PATH/get-snyk-prs.sh
         $GITHUB_ACTION_PATH/get-snyk-prs.sh
 
     - name: Create SuperSnyk 🦸 branch
       if: env.IS_SNYK_PR
+      shell: bash 
       run: |
         git config pull.rebase false
         git config user.name github-actions
