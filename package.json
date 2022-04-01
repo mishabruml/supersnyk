@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/mishabruml/supersnyk/issues"
   },
-  "homepage": "https://github.com/mishabruml/supersnyk#readme"
+  "homepage": "https://github.com/mishabruml/supersnyk#readme",
+  "dependencies": {
+    "fast-check": "^2.20.0",
+    "jest": "^26.6.3"
+  }
 }
