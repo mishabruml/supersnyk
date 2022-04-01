@@ -47,9 +47,9 @@ runs:
     - name: Create SuperSnyk 🦸 branch
       if: env.IS_SNYK_PR
       shell: bash
-      run: |
-        chmod +x $GITHUB_ACTION_PATH/create-supersnyk-branch.sh
-        $GITHUB_ACTION_PATH/create-supersnyk-branch.sh
+      env:
+        MAIN_BRANCH_NAME: ${{ inputs.main_branch_name }}
+      run: $GITHUB_ACTION_PATH/create-supersnyk-branch.sh
 
     - uses: actions/checkout@v3
       with:
