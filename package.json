@@ -18,7 +18,7 @@
   "homepage": "https://github.com/mishabruml/supersnyk#readme",
   "dependencies": {
     "convict": "^5.2.1",
-    "fast-check": "^2.20.0",
+    "fast-check": "^2.24.0",
     "got": "^1.2.2",
     "jest": "^27.5.1"
   }
