@@ -1,11 +1,8 @@
 on:
   pull_request:
-    # branches:
-    #   - "snyk-fix-*"
-    #   - "snyk-upgrade-*"
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    branches:
+      - "snyk-fix"
+      # - "snyk-upgrade-*"
 
 jobs:
   SuperSnyk:
