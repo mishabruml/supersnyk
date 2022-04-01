@@ -40,20 +40,20 @@ runs:
         chmod +x $GITHUB_ACTION_PATH/get-snyk-prs.sh
         $GITHUB_ACTION_PATH/get-snyk-prs.sh
 
-    - name: Create SuperSnyk 🦸 branch
+    - name: Create SuperSnyk 🦸 commit
       if: env.IS_SNYK_PR
       shell: bash
       env:
         MAIN_BRANCH_NAME: ${{ inputs.main_branch_name }}
         SNYK_PR_BRANCH_NAMES: ${{ env.SNYK_PR_BRANCH_NAMES }}
       run: |
-        chmod +x $GITHUB_ACTION_PATH/create-supersnyk-branch.sh
-        $GITHUB_ACTION_PATH/create-supersnyk-branch.sh
+        chmod +x $GITHUB_ACTION_PATH/create-supersnyk-commit.sh
+        $GITHUB_ACTION_PATH/create-supersnyk-commit.sh
 
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        ref: ${{ env.SUPERSNYK_TEMP_BRANCH }}
+    # - uses: actions/checkout@v3
+    #   with:
+    #     fetch-depth: 0
+    #     ref: ${{ env.SUPERSNYK_TEMP_BRANCH }}
 
     - name: Create SuperSnyk 🦸 PR
       if: env.IS_SNYK_PR
