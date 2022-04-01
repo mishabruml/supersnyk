@@ -31,12 +31,6 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
 
-    # - uses: bobvanderlinden/combine-pull-requests@v3
-    #   if: env.IS_SNYK_PR
-    #   with:
-    #     label: snyk
-    #     repo-token: ${{ inputs.github_token }}
-
     - name: Get Snyk PRs
       if: env.IS_SNYK_PR
       env:
@@ -51,6 +45,7 @@ runs:
       shell: bash
       env:
         MAIN_BRANCH_NAME: ${{ inputs.main_branch_name }}
+        SNYK_PR_BRANCH_NAMES: ${{ env.SNYK_PR_BRANCH_NAMES }}
       run: |
         chmod +x $GITHUB_ACTION_PATH/create-supersnyk-branch.sh
         $GITHUB_ACTION_PATH/create-supersnyk-branch.sh
