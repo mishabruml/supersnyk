@@ -7,7 +7,10 @@ inputs:
   github_token:
     description: "GitHub token i.e. secrets.GITHUB_TOKEN"
     required: true
-    default: "CHANGE_ME"
+    default: CHANGE_ME
+  main_branch_name:
+    description: The name of the main/base/default branch. Defaults to "main"
+    default: main
 
 runs:
   using: "composite"
@@ -15,7 +18,7 @@ runs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        ref: main
+        ref: ${{ inputs.main_branch_name }}
 
     - name: Detect if Snyk PR and set flag
       run: echo "IS_SNYK_PR=${{ (startsWith(github.head_ref, 'snyk-fix-') || startsWith(github.head_ref, 'snyk-upgrade-')) && startsWith(github.event.pull_request.title, '[Snyk]') }}" >> $GITHUB_ENV
