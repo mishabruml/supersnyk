@@ -26,7 +26,9 @@ runs:
 
     - name: Add 'snyk' label to snyk PR
       if: env.IS_SNYK_PR
-      run: gh pr edit $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }') --add-label 'snyk'
+      run: |
+        gh api repos/:owner/:repo/labels/snyk -X GET --silent || gh label create snyk -c "1D76DB" -d "Automatically generated Snyk PR. Label added by SuperSynk https://github.com/mishabruml/supersnyk"
+        gh pr edit $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }') --add-label 'snyk'
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
